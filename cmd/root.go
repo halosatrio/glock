@@ -4,7 +4,6 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -38,7 +37,7 @@ Options:
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
 		defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset)
-		boxStyle := tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorPurple)
+		// boxStyle := tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorPurple)
 
 		// Initialize screen
 		s, err := tcell.NewScreen()
@@ -52,10 +51,11 @@ Options:
 		s.EnableMouse()
 		s.EnablePaste()
 		s.Clear()
+		termWidth, termHeight := s.Size()
 
 		// Draw initial boxes
-		drawBox(s, 1, 1, 42, 7, boxStyle, "Click and drag to draw a box")
-		drawBox(s, 5, 9, 32, 14, boxStyle, "Press C to reset")
+		// drawBox(s, 1, 1, 42, 7, boxStyle, "Click and drag to draw a box")
+		// drawBox(s, 5, 9, 32, 14, boxStyle, "Press C to reset")
 
 		quit := func() {
 			// You have to catch panics in a defer, clean up, and
@@ -79,10 +79,11 @@ Options:
 		// s.PostEvent(tcell.NewEventKey(tcell.KeyRune, rune('a'), 0))
 
 		// Event loop
-		ox, oy := -1, -1
+		// ox, oy := -1, -1
 		for {
 			// Update screen
 			s.Show()
+			drawString(s, termWidth/2, termHeight/2, "satrio", defStyle)
 
 			// Poll event
 			ev := s.PollEvent()
@@ -99,22 +100,22 @@ Options:
 				} else if ev.Rune() == 'C' || ev.Rune() == 'c' {
 					s.Clear()
 				}
-			case *tcell.EventMouse:
-				x, y := ev.Position()
+				// case *tcell.EventMouse:
+				// 	x, y := ev.Position()
 
-				switch ev.Buttons() {
-				case tcell.Button1, tcell.Button2:
-					if ox < 0 {
-						ox, oy = x, y // record location when click started
-					}
+				// 	switch ev.Buttons() {
+				// 	case tcell.Button1, tcell.Button2:
+				// 		if ox < 0 {
+				// 			ox, oy = x, y // record location when click started
+				// 		}
 
-				case tcell.ButtonNone:
-					if ox >= 0 {
-						label := fmt.Sprintf("%d,%d to %d,%d", ox, oy, x, y)
-						drawBox(s, ox, oy, x, y, boxStyle, label)
-						ox, oy = -1, -1
-					}
-				}
+				// 	case tcell.ButtonNone:
+				// 		if ox >= 0 {
+				// 			label := fmt.Sprintf("%d,%d to %d,%d", ox, oy, x, y)
+				// 			drawBox(s, ox, oy, x, y, boxStyle, label)
+				// 			ox, oy = -1, -1
+				// 		}
+				// 	}
 			}
 		}
 	},
@@ -129,13 +130,15 @@ func Execute() {
 	}
 }
 
-var Verbose bool
+var Seconds bool
 
 func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+	// rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+
+	rootCmd.Flags().BoolVarP(&Seconds, "second", "s", false, "display seconds")
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.glock.yaml)")
 
@@ -144,54 +147,61 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func drawText(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {
-	row := y1
-	col := x1
+func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
 	for _, r := range []rune(text) {
-		s.SetContent(col, row, r, nil, style)
-		col++
-		if col >= x2 {
-			row++
-			col = x1
-		}
-		if row > y2 {
-			break
-		}
+		s.SetContent(x, y, r, nil, style)
+		x++
 	}
 }
 
-func drawBox(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {
-	if y2 < y1 {
-		y1, y2 = y2, y1
-	}
-	if x2 < x1 {
-		x1, x2 = x2, x1
-	}
+// func drawText(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {
+// 	row := y1
+// 	col := x1
+// 	for _, r := range []rune(text) {
+// 		s.SetContent(col, row, r, nil, style)
+// 		col++
+// 		if col >= x2 {
+// 			row++
+// 			col = x1
+// 		}
+// 		if row > y2 {
+// 			break
+// 		}
+// 	}
+// }
 
-	// Fill background
-	for row := y1; row <= y2; row++ {
-		for col := x1; col <= x2; col++ {
-			s.SetContent(col, row, ' ', nil, style)
-		}
-	}
+// func drawBox(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {
+// 	if y2 < y1 {
+// 		y1, y2 = y2, y1
+// 	}
+// 	if x2 < x1 {
+// 		x1, x2 = x2, x1
+// 	}
 
-	// Draw borders
-	for col := x1; col <= x2; col++ {
-		s.SetContent(col, y1, tcell.RuneHLine, nil, style)
-		s.SetContent(col, y2, tcell.RuneHLine, nil, style)
-	}
-	for row := y1 + 1; row < y2; row++ {
-		s.SetContent(x1, row, tcell.RuneVLine, nil, style)
-		s.SetContent(x2, row, tcell.RuneVLine, nil, style)
-	}
+// 	// Fill background
+// 	for row := y1; row <= y2; row++ {
+// 		for col := x1; col <= x2; col++ {
+// 			s.SetContent(col, row, ' ', nil, style)
+// 		}
+// 	}
 
-	// Only draw corners if necessary
-	if y1 != y2 && x1 != x2 {
-		s.SetContent(x1, y1, tcell.RuneULCorner, nil, style)
-		s.SetContent(x2, y1, tcell.RuneURCorner, nil, style)
-		s.SetContent(x1, y2, tcell.RuneLLCorner, nil, style)
-		s.SetContent(x2, y2, tcell.RuneLRCorner, nil, style)
-	}
+// 	// Draw borders
+// 	for col := x1; col <= x2; col++ {
+// 		s.SetContent(col, y1, tcell.RuneHLine, nil, style)
+// 		s.SetContent(col, y2, tcell.RuneHLine, nil, style)
+// 	}
+// 	for row := y1 + 1; row < y2; row++ {
+// 		s.SetContent(x1, row, tcell.RuneVLine, nil, style)
+// 		s.SetContent(x2, row, tcell.RuneVLine, nil, style)
+// 	}
 
-	drawText(s, x1+1, y1+1, x2-1, y2-1, style, text)
-}
+// 	// Only draw corners if necessary
+// 	if y1 != y2 && x1 != x2 {
+// 		s.SetContent(x1, y1, tcell.RuneULCorner, nil, style)
+// 		s.SetContent(x2, y1, tcell.RuneURCorner, nil, style)
+// 		s.SetContent(x1, y2, tcell.RuneLLCorner, nil, style)
+// 		s.SetContent(x2, y2, tcell.RuneLRCorner, nil, style)
+// 	}
+
+// 	drawText(s, x1+1, y1+1, x2-1, y2-1, style, text)
+// }
