@@ -37,7 +37,7 @@ Options:
 `,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset)
+		defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorTomato)
 
 		// Initialize screen
 		s, err := tcell.NewScreen()
@@ -77,6 +77,8 @@ Options:
 			for {
 				s.Show()
 
+				color := tcell.StyleDefault.Background(tcell.ColorMediumBlue).Foreground(tcell.Color107)
+
 				// Print time on terminal
 				nowTime := time.Now()
 				hours := nowTime.Hour()
@@ -84,12 +86,24 @@ Options:
 				seconds := nowTime.Second()
 				var formattedTime string
 
+				// toggle second flags
 				if Seconds {
 					formattedTime = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
 				} else {
 					formattedTime = fmt.Sprintf("%02d:%02d", hours, minutes)
 				}
+
+				diff := 10
 				drawString(s, termWidth/2, termHeight/2, formattedTime, defStyle)
+
+				drawString(s, termWidth/2+diff, termHeight/2-2, "      ", color)
+				drawString(s, termWidth/2+diff, termHeight/2-1, "  ", color)
+				drawString(s, termWidth/2+diff+4, termHeight/2-1, "  ", color)
+				drawString(s, termWidth/2+diff, termHeight/2, "  ", color)
+				drawString(s, termWidth/2+diff+4, termHeight/2, "  ", color)
+				drawString(s, termWidth/2+diff, termHeight/2+1, "  ", color)
+				drawString(s, termWidth/2+diff+4, termHeight/2+1, "  ", color)
+				drawString(s, termWidth/2+diff, termHeight/2+2, "      ", color)
 
 				// update the screen every second
 				// Sleep() is used to stop the goroutine
@@ -143,6 +157,7 @@ func init() {
 }
 
 func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
+	// for _, r := range text
 	for _, r := range []rune(text) {
 		s.SetContent(x, y, r, nil, style)
 		x++
