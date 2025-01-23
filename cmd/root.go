@@ -102,10 +102,6 @@ Options:
 			case *tcell.EventKey:
 				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC || ev.Rune() == 'q' {
 					break mainloop
-				} else if ev.Key() == tcell.KeyCtrlL {
-					s.Sync() // update the terminal
-				} else if ev.Rune() == 'C' || ev.Rune() == 'c' {
-					s.Clear() // clear the terminal
 				}
 			}
 		}
