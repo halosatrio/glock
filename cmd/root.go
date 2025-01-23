@@ -72,19 +72,27 @@ Options:
 		// s.PostEvent(tcell.NewEventKey(tcell.KeyRune, rune('a'), 0))
 
 		// Event loop
+		// goroutine
 		go func() {
 			for {
-				// Update screen
 				s.Show()
 
-				// Print time on terminal. but not updated per second
+				// Print time on terminal
 				nowTime := time.Now()
 				hours := nowTime.Hour()
 				minutes := nowTime.Minute()
 				seconds := nowTime.Second()
-				formattedTime := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+				var formattedTime string
+
+				if Seconds {
+					formattedTime = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+				} else {
+					formattedTime = fmt.Sprintf("%02d:%02d", hours, minutes)
+				}
 				drawString(s, termWidth/2, termHeight/2, formattedTime, defStyle)
 
+				// update the screen every second
+				// Sleep() is used to stop the goroutine
 				s.Sync()
 				time.Sleep(time.Second)
 			}
