@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var SmallStopWatchDiff = [11]int{7, 6, 6, 7, 6, 6, 7, 6, 4, 7, 7}
+var ClockDiff = [8]int{7, 6, 6, 7, 6, 6, 7, 6}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -77,6 +77,8 @@ Options:
 		// goroutine
 		go func() {
 			for {
+				// terminal needs to be clear every second
+				// if not the previous block will keep appearing on screen
 				s.Clear()
 
 				color := tcell.StyleDefault.Background(tcell.ColorTomato).Foreground(tcell.Color107)
@@ -86,23 +88,23 @@ Options:
 				hours := nowTime.Hour()
 				minutes := nowTime.Minute()
 				seconds := nowTime.Second()
-				var formattedTime string
 
-				diff := -26
-				totalString := 8
+				formattedTime := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+				totalString, diff := 0, 0
 
 				// toggle second flags
 				if Seconds {
-					formattedTime = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+					totalString, diff = 8, -26
 				} else {
-					formattedTime = fmt.Sprintf("%02d:%02d", hours, minutes)
+					// if not second, cut total string
+					totalString, diff = 5, -17
 				}
 
 				drawString(s, termWidth/2, termHeight/2+5, formattedTime, defStyle)
 
 				for i := 0; i < totalString; i++ {
 					if i != 0 {
-						diff = diff + SmallStopWatchDiff[i-1]
+						diff = diff + ClockDiff[i-1]
 					}
 					if i == 2 || i == 5 {
 						drawNumber(s, termWidth, termHeight, diff, formattedTime[i], color)
