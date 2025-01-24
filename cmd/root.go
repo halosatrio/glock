@@ -13,7 +13,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var ClockDiff = [8]int{7, 6, 6, 7, 6, 6, 7, 6}
+// give spacing on block
+// default block width is 6
+// block 2,5,8 have extra 1 spacing
+var ClockDiff = [8]int{0, 7, 6, 6, 7, 6, 6, 7}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -23,9 +26,9 @@ var rootCmd = &cobra.Command{
 
 Default to 12-hour local time, no seconds
 
-Usage: glock [OPTIONS]
+Usage: glock [FLAGS]
 
-Options:
+Flags:
   -s, --second
         Display seconds
   
@@ -104,7 +107,7 @@ Options:
 
 				for i := 0; i < totalString; i++ {
 					if i != 0 {
-						diff = diff + ClockDiff[i-1]
+						diff = diff + ClockDiff[i]
 					}
 					if i == 2 || i == 5 {
 						drawNumber(s, termWidth, termHeight, diff, formattedTime[i], color)
@@ -157,26 +160,24 @@ func init() {
 
 	rootCmd.Flags().BoolVarP(&Seconds, "second", "s", false, "display seconds")
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.glock.yaml)")
-
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
-	// for _, r := range []rune(text) {
-	for _, r := range text {
+	// for _, r := range text {
+	for _, r := range []rune(text) {
 		s.SetContent(x, y, r, nil, style)
 		x++
 	}
 }
 
+// Big chunks of code just to draw block numbers on screen
 func bigColon(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+2, height/2-1, "  ", style)
 	drawString(s, width/2+diff+2, height/2+1, "  ", style)
 }
-
 func bigOne(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+4, height/2-2, "  ", style)
 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
