@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var SmallStopWatchDiff = [11]int{7, 6, 6, 7, 6, 6, 7, 6, 4, 7, 7}
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "glock",
@@ -75,9 +77,9 @@ Options:
 		// goroutine
 		go func() {
 			for {
-				s.Show()
+				s.Clear()
 
-				color := tcell.StyleDefault.Background(tcell.ColorMediumBlue).Foreground(tcell.Color107)
+				color := tcell.StyleDefault.Background(tcell.ColorTomato).Foreground(tcell.Color107)
 
 				// Print time on terminal
 				nowTime := time.Now()
@@ -86,6 +88,9 @@ Options:
 				seconds := nowTime.Second()
 				var formattedTime string
 
+				diff := -26
+				totalString := 8
+
 				// toggle second flags
 				if Seconds {
 					formattedTime = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
@@ -93,17 +98,18 @@ Options:
 					formattedTime = fmt.Sprintf("%02d:%02d", hours, minutes)
 				}
 
-				diff := 10
-				drawString(s, termWidth/2, termHeight/2, formattedTime, defStyle)
+				drawString(s, termWidth/2, termHeight/2+5, formattedTime, defStyle)
 
-				drawString(s, termWidth/2+diff, termHeight/2-2, "      ", color)
-				drawString(s, termWidth/2+diff, termHeight/2-1, "  ", color)
-				drawString(s, termWidth/2+diff+4, termHeight/2-1, "  ", color)
-				drawString(s, termWidth/2+diff, termHeight/2, "  ", color)
-				drawString(s, termWidth/2+diff+4, termHeight/2, "  ", color)
-				drawString(s, termWidth/2+diff, termHeight/2+1, "  ", color)
-				drawString(s, termWidth/2+diff+4, termHeight/2+1, "  ", color)
-				drawString(s, termWidth/2+diff, termHeight/2+2, "      ", color)
+				for i := 0; i < totalString; i++ {
+					if i != 0 {
+						diff = diff + SmallStopWatchDiff[i-1]
+					}
+					if i == 2 || i == 5 {
+						drawNumber(s, termWidth, termHeight, diff, formattedTime[i], color)
+					} else {
+						drawNumber(s, termWidth, termHeight, diff, formattedTime[i], color)
+					}
+				}
 
 				// update the screen every second
 				// Sleep() is used to stop the goroutine
@@ -157,9 +163,131 @@ func init() {
 }
 
 func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
-	// for _, r := range text
-	for _, r := range []rune(text) {
+	// for _, r := range []rune(text) {
+	for _, r := range text {
 		s.SetContent(x, y, r, nil, style)
 		x++
+	}
+}
+
+func bigColon(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff+2, height/2-1, "  ", style)
+	drawString(s, width/2+diff+2, height/2+1, "  ", style)
+}
+
+func bigOne(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff+4, height/2-2, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+}
+func bigTwo(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+	drawString(s, width/2+diff, height/2, "      ", style)
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigThree(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+	drawString(s, width/2+diff, height/2, "      ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigFour(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "  ", style)
+	drawString(s, width/2+diff+4, height/2-2, "  ", style)
+
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+	drawString(s, width/2+diff, height/2, "      ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+}
+func bigFive(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff, height/2, "      ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigSix(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff, height/2, "      ", style)
+
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigSeven(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+}
+func bigEight(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+	drawString(s, width/2+diff, height/2, "      ", style)
+
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigNine(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+	drawString(s, width/2+diff, height/2, "      ", style)
+
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigZero(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff, height/2-2, "      ", style)
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+	drawString(s, width/2+diff, height/2, "  ", style)
+	drawString(s, width/2+diff+4, height/2, "  ", style)
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, style tcell.Style) {
+	switch nowTime {
+	case '0':
+		bigZero(s, termWidth, termHeight, diff, style)
+	case '1':
+		bigOne(s, termWidth, termHeight, diff, style)
+	case '2':
+		bigTwo(s, termWidth, termHeight, diff, style)
+	case '3':
+		bigThree(s, termWidth, termHeight, diff, style)
+	case '4':
+		bigFour(s, termWidth, termHeight, diff, style)
+	case '5':
+		bigFive(s, termWidth, termHeight, diff, style)
+	case '6':
+		bigSix(s, termWidth, termHeight, diff, style)
+	case '7':
+		bigSeven(s, termWidth, termHeight, diff, style)
+	case '8':
+		bigEight(s, termWidth, termHeight, diff, style)
+	case '9':
+		bigNine(s, termWidth, termHeight, diff, style)
+	case ':':
+		bigColon(s, termWidth, termHeight, diff, style)
 	}
 }
