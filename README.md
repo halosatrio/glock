@@ -12,9 +12,10 @@ a digital clock in your terminal, inspired by tty-clock
 ### TODO:
 
 - [x] display clock using time.Now()
--
+- [ ] show am/pm
+- [ ] show date
 - [ ] add flags
-  - [ ] help
+  - [x] help
   - [x] display seconds
   - [ ] date
   - [ ] colors
