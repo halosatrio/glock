@@ -56,7 +56,6 @@ Flags:
 		s.EnableMouse()
 		s.EnablePaste()
 		s.Clear()
-		termWidth, termHeight := s.Size()
 
 		quit := func() {
 			// You have to catch panics in a defer, clean up, and
@@ -83,6 +82,11 @@ Flags:
 				// terminal needs to be clear every second
 				// if not the previous block will keep appearing on screen
 				s.Clear()
+
+				// get terminal size every second
+				// to update the clock position when terminal size is changed
+				// position will be updated on the next second, not instantly
+				termWidth, termHeight := s.Size()
 
 				color := tcell.StyleDefault.Background(tcell.ColorTomato).Foreground(tcell.Color107)
 
