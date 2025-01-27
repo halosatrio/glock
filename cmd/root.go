@@ -97,26 +97,27 @@ Flags:
 				seconds := nowTime.Second()
 
 				formattedTime := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
-				totalString, diff := 0, 0
+				formattedDate := fmt.Sprintf("%02d-%02d-%02d", nowTime.Year(), nowTime.Month(), nowTime.Day())
+				totalString, timeDiff, dateDiff := 0, 0, 0
 
 				// toggle second flags
 				if Seconds {
-					totalString, diff = 8, -26
+					totalString, timeDiff, dateDiff = 8, -26, 4
 				} else {
 					// if not second, cut total string
-					totalString, diff = 5, -17
+					totalString, timeDiff, dateDiff = 5, -17, 1
 				}
 
-				drawString(s, termWidth/2, termHeight/2+5, formattedTime, defStyle)
+				drawString(s, (termWidth/2)-totalString+dateDiff, termHeight/2+5, formattedDate, defStyle)
 
 				for i := 0; i < totalString; i++ {
 					if i != 0 {
-						diff = diff + ClockDiff[i]
+						timeDiff = timeDiff + ClockDiff[i]
 					}
 					if i == 2 || i == 5 {
-						drawNumber(s, termWidth, termHeight, diff, formattedTime[i], color)
+						drawNumber(s, termWidth, termHeight, timeDiff, formattedTime[i], color)
 					} else {
-						drawNumber(s, termWidth, termHeight, diff, formattedTime[i], color)
+						drawNumber(s, termWidth, termHeight, timeDiff, formattedTime[i], color)
 					}
 				}
 
