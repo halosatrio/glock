@@ -16,7 +16,7 @@ import (
 // give spacing on block
 // default block width is 6
 // block 2,5,8 have extra 1 spacing
-var ClockDiff = [8]int{0, 7, 6, 6, 7, 6, 6, 7}
+var ClockDiff = [10]int{0, 7, 6, 6, 7, 6, 6, 7, 8, 7}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -108,6 +108,18 @@ Flags:
 					totalString, timeDiff, dateDiff = 5, -17, 1
 				}
 
+				// toggle 24 hour format
+				// TODO: conditional 12 hour format
+				// var hoursf int
+				// if Meridiem {
+				// 	hoursf = nowTime.Hour() % 12
+				// 	if hoursf == 0 {
+				// 		hoursf = 12
+				// 	}
+				// } else {
+				// 	hoursf = nowTime.Hour()
+				// }
+
 				drawString(s, (termWidth/2)-totalString+dateDiff, termHeight/2+5, formattedDate, defStyle)
 
 				for i := 0; i < totalString; i++ {
@@ -156,6 +168,7 @@ func Execute() {
 }
 
 var Seconds bool
+var Meridiem bool
 
 func init() {
 	// Here you will define your flags and configuration settings.
@@ -164,6 +177,7 @@ func init() {
 	// rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 
 	rootCmd.Flags().BoolVarP(&Seconds, "second", "s", false, "display seconds")
+	rootCmd.Flags().BoolVarP(&Meridiem, "meridiem", "m", false, "display 24 hour format")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -272,6 +286,48 @@ func bigZero(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2+1, "  ", style)
 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
 	drawString(s, width/2+diff, height/2+2, "      ", style)
+}
+func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+	drawString(s, width/2+diff, height/2, "      ", style)
+
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+	drawString(s, width/2+diff+4, height/2+2, "      ", style)
+}
+func bigP(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+	drawString(s, width/2+diff, height/2, "      ", style)
+
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+	drawString(s, width/2+diff+4, height/2+2, "      ", style)
+}
+func bigM(s tcell.Screen, width, height, diff int, style tcell.Style) {
+	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+
+	drawString(s, width/2+diff, height/2-1, "  ", style)
+	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+	drawString(s, width/2+diff, height/2, "      ", style)
+
+	drawString(s, width/2+diff, height/2+1, "  ", style)
+	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+	drawString(s, width/2+diff, height/2+2, "      ", style)
+	drawString(s, width/2+diff+4, height/2+2, "      ", style)
 }
 func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, style tcell.Style) {
 	switch nowTime {
