@@ -16,7 +16,7 @@ import (
 // give spacing on block
 // default block width is 6
 // block 2,5,8 have extra 1 spacing
-var ClockDiff = [10]int{0, 7, 6, 6, 7, 6, 6, 7, 8, 7}
+var ClockDiff = [11]int{0, 7, 6, 6, 7, 6, 6, 7, 8, 7}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -92,33 +92,34 @@ Flags:
 
 				// Print time on terminal
 				nowTime := time.Now()
-				hours := nowTime.Hour()
-				minutes := nowTime.Minute()
-				seconds := nowTime.Second()
+				// hours := nowTime.Hour()
+				// minutes := nowTime.Minute()
+				// seconds := nowTime.Second()
 
-				formattedTime := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+				var formattedTime string
 				formattedDate := fmt.Sprintf("%02d-%02d-%02d", nowTime.Year(), nowTime.Month(), nowTime.Day())
 				totalString, timeDiff, dateDiff := 0, 0, 0
 
 				// toggle second flags
-				if Seconds {
-					totalString, timeDiff, dateDiff = 8, -26, 4
-				} else {
-					// if not second, cut total string
-					totalString, timeDiff, dateDiff = 5, -17, 1
-				}
-
 				// toggle 24 hour format
 				// TODO: conditional 12 hour format
-				// var hoursf int
-				// if Meridiem {
-				// 	hoursf = nowTime.Hour() % 12
-				// 	if hoursf == 0 {
-				// 		hoursf = 12
-				// 	}
-				// } else {
-				// 	hoursf = nowTime.Hour()
-				// }
+				if Meridiem {
+					if Seconds {
+						totalString, timeDiff, dateDiff = 10, -26, 4
+						formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
+					} else {
+						totalString, timeDiff, dateDiff = 7, -24, 1
+						formattedTime = fmt.Sprint(nowTime.Format("03:04PM"))
+					}
+				} else {
+					if Seconds {
+						totalString, timeDiff, dateDiff = 8, -25, 4
+						formattedTime = fmt.Sprint(nowTime.Format("03:04:05"))
+					} else {
+						totalString, timeDiff, dateDiff = 5, -17, 1
+						formattedTime = fmt.Sprint(nowTime.Format("03:04"))
+					}
+				}
 
 				drawString(s, (termWidth/2)-totalString+dateDiff, termHeight/2+5, formattedDate, defStyle)
 
@@ -288,7 +289,7 @@ func bigZero(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2+2, "      ", style)
 }
 func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+	drawString(s, width/2+diff+1, height/2-2, "    ", style)
 
 	drawString(s, width/2+diff, height/2-1, "  ", style)
 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
@@ -298,36 +299,35 @@ func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2+1, "  ", style)
 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
 
-	drawString(s, width/2+diff, height/2+2, "      ", style)
-	drawString(s, width/2+diff+4, height/2+2, "      ", style)
+	drawString(s, width/2+diff, height/2+2, "  ", style)
+	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
 func bigP(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+	drawString(s, width/2+diff, height/2-2, "     ", style)
 
 	drawString(s, width/2+diff, height/2-1, "  ", style)
 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
 
-	drawString(s, width/2+diff, height/2, "      ", style)
+	drawString(s, width/2+diff, height/2, "     ", style)
 
 	drawString(s, width/2+diff, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
 
-	drawString(s, width/2+diff, height/2+2, "      ", style)
-	drawString(s, width/2+diff+4, height/2+2, "      ", style)
+	drawString(s, width/2+diff, height/2+2, "  ", style)
 }
 func bigM(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+	drawString(s, width/2+diff, height/2-2, "  ", style)
+	drawString(s, width/2+diff+4, height/2-2, "  ", style)
 
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+	drawString(s, width/2+diff, height/2-1, "      ", style)
 
-	drawString(s, width/2+diff, height/2, "      ", style)
+	drawString(s, width/2+diff, height/2, "  ", style)
+	drawString(s, width/2+diff+4, height/2, "  ", style)
 
 	drawString(s, width/2+diff, height/2+1, "  ", style)
 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
 
-	drawString(s, width/2+diff, height/2+2, "      ", style)
-	drawString(s, width/2+diff+4, height/2+2, "      ", style)
+	drawString(s, width/2+diff, height/2+2, "  ", style)
+	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
 func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, style tcell.Style) {
 	switch nowTime {
@@ -353,5 +353,11 @@ func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, s
 		bigNine(s, termWidth, termHeight, diff, style)
 	case ':':
 		bigColon(s, termWidth, termHeight, diff, style)
+	case 'A':
+		bigA(s, termWidth, termHeight, diff, style)
+	case 'P':
+		bigP(s, termWidth, termHeight, diff, style)
+	case 'M':
+		bigM(s, termWidth, termHeight, diff, style)
 	}
 }
