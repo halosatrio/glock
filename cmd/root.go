@@ -105,11 +105,15 @@ Flags:
 				// TODO: conditional 12 hour format
 				if Meridiem {
 					if Seconds {
-						totalString, timeDiff, dateDiff = 10, -26, 4
+						totalString, timeDiff, dateDiff = 8, -34, 4
 						formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
+						ampm := formattedTime[len(formattedTime)-2:]
+						drawMeridiem(s, ampm, termWidth, termHeight, 24, color)
 					} else {
-						totalString, timeDiff, dateDiff = 7, -24, 1
+						totalString, timeDiff, dateDiff = 5, -26, 1
 						formattedTime = fmt.Sprint(nowTime.Format("03:04PM"))
+						ampm := formattedTime[len(formattedTime)-2:]
+						drawMeridiem(s, ampm, termWidth, termHeight, 14, color)
 					}
 				} else {
 					if Seconds {
@@ -193,17 +197,28 @@ func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
 	}
 }
 
+// function print am/pm
+func drawMeridiem(s tcell.Screen, val string, width, height, diff int, style tcell.Style) {
+	if val == "am" {
+		bigA(s, width, height, diff, style)
+		bigM(s, width, height, diff+7, style)
+	} else {
+		bigP(s, width, height, diff, style)
+		bigM(s, width, height, diff+7, style)
+	}
+}
+
 // Big chunks of code just to draw block numbers on screen
 func bigColon(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+2, height/2-1, "  ", style)
 	drawString(s, width/2+diff+2, height/2+1, "  ", style)
 }
 func bigOne(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff+4, height/2-2, "  ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2, "  ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+	drawString(s, width/2+diff, height/2-1, "    ", style)
+	drawString(s, width/2+diff+2, height/2, "  ", style)
+	drawString(s, width/2+diff+2, height/2+1, "  ", style)
+	drawString(s, width/2+diff, height/2+2, "      ", style)
 }
 func bigTwo(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2-2, "      ", style)
@@ -303,12 +318,12 @@ func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
 func bigP(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "     ", style)
+	drawString(s, width/2+diff, height/2-2, "      ", style)
 
 	drawString(s, width/2+diff, height/2-1, "  ", style)
 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
 
-	drawString(s, width/2+diff, height/2, "     ", style)
+	drawString(s, width/2+diff, height/2, "      ", style)
 
 	drawString(s, width/2+diff, height/2+1, "  ", style)
 
