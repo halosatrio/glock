@@ -32,8 +32,8 @@ Flags:
   -s, --second
         Display seconds
   
-  -d, --date
-        Display date with format YYYY-MM-DD
+  -m, --meridiem
+        Display time in 12 hour format
   
   -c, --color <COLOR>
 
@@ -118,10 +118,10 @@ Flags:
 				} else {
 					if Seconds {
 						totalString, timeDiff, dateDiff = 8, -25, 4
-						formattedTime = fmt.Sprint(nowTime.Format("03:04:05"))
+						formattedTime = fmt.Sprintf("%02d:%02d:%02d", nowTime.Hour(), nowTime.Minute(), nowTime.Second())
 					} else {
 						totalString, timeDiff, dateDiff = 5, -17, 1
-						formattedTime = fmt.Sprint(nowTime.Format("03:04"))
+						formattedTime = fmt.Sprintf("%02d:%02d", nowTime.Hour(), nowTime.Minute())
 					}
 				}
 
@@ -368,11 +368,5 @@ func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, s
 		bigNine(s, termWidth, termHeight, diff, style)
 	case ':':
 		bigColon(s, termWidth, termHeight, diff, style)
-	case 'A':
-		bigA(s, termWidth, termHeight, diff, style)
-	case 'P':
-		bigP(s, termWidth, termHeight, diff, style)
-	case 'M':
-		bigM(s, termWidth, termHeight, diff, style)
 	}
 }
