@@ -14,8 +14,8 @@ a digital clock in your terminal, inspired by tty-clock
 - [x] display clock using time.Now()
 - [x] show am/pm
 - [x] show date
-- [ ] add flags
+- [x] add flags
   - [x] help
   - [x] display seconds
-  - [ ] colors
+  - [x] colors
   - [x] 24/12 hours format

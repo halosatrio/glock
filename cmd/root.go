@@ -43,8 +43,6 @@ Flags:
 `,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset)
-
 		// Initialize screen
 		s, err := tcell.NewScreen()
 		if err != nil {
@@ -53,7 +51,6 @@ Flags:
 		if err := s.Init(); err != nil {
 			log.Fatalf("%+v", err)
 		}
-		s.SetStyle(defStyle)
 		s.EnableMouse()
 		s.EnablePaste()
 		s.Clear()
@@ -90,7 +87,8 @@ Flags:
 				termWidth, termHeight := s.Size()
 
 				// set color by flag
-				color := tcell.StyleDefault.Background(flagColor(FlagColor)).Foreground(flagColor(FlagColor))
+				var color tcell.Style
+				color = color.Background(flagColor(FlagColor)).Foreground(flagColor(FlagColor))
 
 				// Print time on terminal
 				nowTime := time.Now()
@@ -105,7 +103,7 @@ Flags:
 				// toggle second flags
 				// toggle 24 hour format
 				if Meridiem {
-					formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
+					formattedTime = fmt.Sprint(nowTime.Format("15:04:05PM"))
 					ampm := formattedTime[len(formattedTime)-2:]
 					if Seconds {
 						totalString, timeDiff = 8, -34
@@ -191,6 +189,7 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+// function to change color of the clock
 func flagColor(ColorString string) tcell.Color {
 	switch ColorString {
 	case "black":
@@ -209,7 +208,7 @@ func flagColor(ColorString string) tcell.Color {
 		return tcell.ColorRed
 	case "yellow":
 		return tcell.ColorYellow
-	case "dark-gray":
+	case "gray":
 		return tcell.ColorDarkGray
 	default:
 		if ColorString == "" {
@@ -231,7 +230,7 @@ func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
 
 // function print am/pm
 func drawMeridiem(s tcell.Screen, val string, width, height, diff int, style tcell.Style) {
-	if val == "am" {
+	if val == "AM" {
 		bigA(s, width, height, diff, style)
 		bigM(s, width, height, diff+7, style)
 	} else {
