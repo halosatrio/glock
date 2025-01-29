@@ -98,34 +98,35 @@ Flags:
 
 				var formattedTime string
 				formattedDate := fmt.Sprintf("%02d-%02d-%02d", nowTime.Year(), nowTime.Month(), nowTime.Day())
-				totalString, timeDiff, dateDiff := 0, 0, 0
+				totalString, timeDiff := 0, 0
 
 				// toggle second flags
 				// toggle 24 hour format
 				// TODO: conditional 12 hour format
 				if Meridiem {
 					if Seconds {
-						totalString, timeDiff, dateDiff = 8, -34, 4
+						totalString, timeDiff = 8, -34
 						formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
 						ampm := formattedTime[len(formattedTime)-2:]
 						drawMeridiem(s, ampm, termWidth, termHeight, 24, color)
 					} else {
-						totalString, timeDiff, dateDiff = 5, -26, 1
+						totalString, timeDiff = 5, -26
 						formattedTime = fmt.Sprint(nowTime.Format("03:04PM"))
 						ampm := formattedTime[len(formattedTime)-2:]
 						drawMeridiem(s, ampm, termWidth, termHeight, 14, color)
 					}
 				} else {
 					if Seconds {
-						totalString, timeDiff, dateDiff = 8, -25, 4
+						totalString, timeDiff = 8, -25
 						formattedTime = fmt.Sprintf("%02d:%02d:%02d", nowTime.Hour(), nowTime.Minute(), nowTime.Second())
 					} else {
-						totalString, timeDiff, dateDiff = 5, -17, 1
+						totalString, timeDiff = 5, -17
 						formattedTime = fmt.Sprintf("%02d:%02d", nowTime.Hour(), nowTime.Minute())
 					}
 				}
 
-				drawString(s, (termWidth/2)-totalString+dateDiff, termHeight/2+5, formattedDate, defStyle)
+				// draw date in the center of terminal below the clock
+				drawString(s, termWidth/2-5, termHeight/2+5, formattedDate, defStyle)
 
 				for i := 0; i < totalString; i++ {
 					if i != 0 {
