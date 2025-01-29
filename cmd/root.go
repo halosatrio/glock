@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -24,7 +25,7 @@ var rootCmd = &cobra.Command{
 	Short: "a digital clock in your terminal  ",
 	Long: `a digital clock in your terminal, inspired by tty-clock.
 
-Default to 12-hour local time, no seconds
+Default to 24-hour local time, no seconds
 
 Usage: glock [FLAGS]
 
@@ -42,7 +43,7 @@ Flags:
 `,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorTomato)
+		defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset)
 
 		// Initialize screen
 		s, err := tcell.NewScreen()
@@ -88,7 +89,8 @@ Flags:
 				// position will be updated on the next second, not instantly
 				termWidth, termHeight := s.Size()
 
-				color := tcell.StyleDefault.Background(tcell.ColorTomato).Foreground(tcell.Color107)
+				// set color by flag
+				color := tcell.StyleDefault.Background(flagColor(FlagColor)).Foreground(flagColor(FlagColor))
 
 				// Print time on terminal
 				nowTime := time.Now()
@@ -102,17 +104,14 @@ Flags:
 
 				// toggle second flags
 				// toggle 24 hour format
-				// TODO: conditional 12 hour format
 				if Meridiem {
+					formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
+					ampm := formattedTime[len(formattedTime)-2:]
 					if Seconds {
 						totalString, timeDiff = 8, -34
-						formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
-						ampm := formattedTime[len(formattedTime)-2:]
 						drawMeridiem(s, ampm, termWidth, termHeight, 24, color)
 					} else {
 						totalString, timeDiff = 5, -26
-						formattedTime = fmt.Sprint(nowTime.Format("03:04PM"))
-						ampm := formattedTime[len(formattedTime)-2:]
 						drawMeridiem(s, ampm, termWidth, termHeight, 14, color)
 					}
 				} else {
@@ -126,7 +125,7 @@ Flags:
 				}
 
 				// draw date in the center of terminal below the clock
-				drawString(s, termWidth/2-5, termHeight/2+5, formattedDate, defStyle)
+				drawString(s, termWidth/2-5, termHeight/2+5, formattedDate, color.Background(tcell.ColorReset))
 
 				for i := 0; i < totalString; i++ {
 					if i != 0 {
@@ -175,6 +174,7 @@ func Execute() {
 
 var Seconds bool
 var Meridiem bool
+var FlagColor string
 
 func init() {
 	// Here you will define your flags and configuration settings.
@@ -184,15 +184,46 @@ func init() {
 
 	rootCmd.Flags().BoolVarP(&Seconds, "second", "s", false, "display seconds")
 	rootCmd.Flags().BoolVarP(&Meridiem, "meridiem", "m", false, "display 24 hour format")
+	rootCmd.Flags().StringVarP(&FlagColor, "color", "c", "", "choose clock color")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+func flagColor(ColorString string) tcell.Color {
+	switch ColorString {
+	case "black":
+		return tcell.ColorBlack
+	case "white":
+		return tcell.ColorWhite
+	case "blue":
+		return tcell.ColorBlue
+	case "cyan":
+		return tcell.ColorDarkCyan
+	case "green":
+		return tcell.ColorGreen
+	case "magenta":
+		return tcell.ColorDarkMagenta
+	case "red":
+		return tcell.ColorRed
+	case "yellow":
+		return tcell.ColorYellow
+	case "dark-gray":
+		return tcell.ColorDarkGray
+	default:
+		if ColorString == "" {
+			return tcell.ColorGreen
+		} else {
+			num, _ := strconv.Atoi(ColorString)
+			return tcell.Color(num)
+		}
+	}
+}
+
 func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
-	// for _, r := range text {
-	for _, r := range []rune(text) {
+	// for _, r := range []rune(text) {
+	for _, r := range text {
 		s.SetContent(x, y, r, nil, style)
 		x++
 	}
