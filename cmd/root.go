@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -214,8 +213,16 @@ func flagColor(ColorString string) tcell.Color {
 		if ColorString == "" {
 			return tcell.ColorGreen
 		} else {
-			num, _ := strconv.Atoi(ColorString)
-			return tcell.Color(num)
+			// can use int8 value 0 < 255 (total color number supported)
+			// num, _ := strconv.Atoi(ColorString)
+			// return tcell.PaletteColor(num)
+			if tcell.ColorNames[ColorString].Valid() {
+				return tcell.ColorNames[ColorString]
+			} else {
+				// dont know how to exit the program and show error
+				// for the time being, invalid color will return default color = green
+				return tcell.ColorGreen
+			}
 		}
 	}
 }
