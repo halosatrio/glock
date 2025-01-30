@@ -1,5 +1,6 @@
 /*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+Copyright © 2025 SATRIO BAYU AJI <halosatrio@gmail.com>
+MIT License
 */
 package cmd
 
@@ -16,7 +17,7 @@ import (
 // give spacing on block
 // default block width is 6
 // block 2,5,8 have extra 1 spacing
-var ClockDiff = [11]int{0, 7, 6, 6, 7, 6, 6, 7, 8, 7}
+var ClockDiff = [8]int{0, 7, 6, 6, 7, 6, 6, 7}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -89,20 +90,17 @@ Flags:
 				var color tcell.Style
 				color = color.Background(flagColor(FlagColor)).Foreground(flagColor(FlagColor))
 
-				// Print time on terminal
+				// get current time
 				nowTime := time.Now()
-				// hours := nowTime.Hour()
-				// minutes := nowTime.Minute()
-				// seconds := nowTime.Second()
 
 				var formattedTime string
 				formattedDate := fmt.Sprintf("%02d-%02d-%02d", nowTime.Year(), nowTime.Month(), nowTime.Day())
 				totalString, timeDiff := 0, 0
 
-				// toggle second flags
-				// toggle 24 hour format
+				// toggle second flag
+				// toggle 12 hour format flag
 				if Meridiem {
-					formattedTime = fmt.Sprint(nowTime.Format("15:04:05PM"))
+					formattedTime = fmt.Sprint(nowTime.Format("03:04:05PM"))
 					ampm := formattedTime[len(formattedTime)-2:]
 					if Seconds {
 						totalString, timeDiff = 8, -34
@@ -174,13 +172,11 @@ var Meridiem bool
 var FlagColor string
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	// rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
-
+	// boolean flags only need the flag without value
 	rootCmd.Flags().BoolVarP(&Seconds, "second", "s", false, "display seconds")
-	rootCmd.Flags().BoolVarP(&Meridiem, "meridiem", "m", false, "display 24 hour format")
+	rootCmd.Flags().BoolVarP(&Meridiem, "meridiem", "m", false, "display 12 hour format")
+
+	// string flags need the flag and the value. example: --color magenta
 	rootCmd.Flags().StringVarP(&FlagColor, "color", "c", "", "choose clock color")
 
 	// Cobra also supports local flags, which will only run
@@ -228,7 +224,6 @@ func flagColor(ColorString string) tcell.Color {
 }
 
 func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
-	// for _, r := range []rune(text) {
 	for _, r := range text {
 		s.SetContent(x, y, r, nil, style)
 		x++
@@ -247,6 +242,14 @@ func drawMeridiem(s tcell.Screen, val string, width, height, diff int, style tce
 }
 
 // Big chunks of code just to draw block numbers on screen
+// need to be refactor and simplified
+// the block numbers are drawn in 6cols x 5rows grid
+//
+//	..00..
+//	0000..
+//	..00..
+//	..00..
+//	000000
 func bigColon(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+2, height/2-1, "  ", style)
 	drawString(s, width/2+diff+2, height/2+1, "  ", style)

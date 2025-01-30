@@ -6,16 +6,9 @@ a digital clock in your terminal, inspired by tty-clock
 
 ## libs used:
 
-- cobra
-- tcell
+- [cobra](https://github.com/spf13/cobra)
+- [tcell](https://github.com/gdamore/tcell)
 
-### TODO:
+## sample image:
 
-- [x] display clock using time.Now()
-- [x] show am/pm
-- [x] show date
-- [x] add flags
-  - [x] help
-  - [x] display seconds
-  - [x] colors
-  - [x] 24/12 hours format
+![sample-image](sample-image.png)
