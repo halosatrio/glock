@@ -75,6 +75,9 @@ Flags:
 
 		// Event loop
 		// goroutine
+		// TODO:
+		// fix why the program flicker (sometimes)
+		// on Clear() function maybe, or the Sync()
 		go func() {
 			for {
 				// terminal needs to be clear every second
