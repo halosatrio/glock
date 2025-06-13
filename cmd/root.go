@@ -253,99 +253,250 @@ func drawMeridiem(s tcell.Screen, val string, width, height, diff int, style tce
 //	..00..
 //	..00..
 //	000000
-func bigColon(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff+2, height/2-1, "  ", style)
-	drawString(s, width/2+diff+2, height/2+1, "  ", style)
+// func bigColon(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff+2, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff+2, height/2+1, "  ", style)
+// }
+// func bigOne(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff+2, height/2-2, "  ", style)
+// 	drawString(s, width/2+diff, height/2-1, "    ", style)
+// 	drawString(s, width/2+diff+2, height/2, "  ", style)
+// 	drawString(s, width/2+diff+2, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff, height/2+2, "      ", style)
+// }
+// func bigTwo(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+// 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+// 	drawString(s, width/2+diff, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff, height/2+2, "      ", style)
+// }
+// func bigThree(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+// 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+// 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff, height/2+2, "      ", style)
+// }
+// func bigFour(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2-2, "  ", style)
+// 	drawString(s, width/2+diff, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+// 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+// }
+// func bigFive(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+// 	drawString(s, width/2+diff, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+// 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff, height/2+2, "      ", style)
+// }
+// func bigSix(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+// 	drawString(s, width/2+diff, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+
+// 	drawString(s, width/2+diff, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+// 	drawString(s, width/2+diff, height/2+2, "      ", style)
+// }
+// func bigSeven(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+// 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+// }
+// func bigEight(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+
+// 	drawString(s, width/2+diff, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+
+// 	drawString(s, width/2+diff, height/2+1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2+1, "  ", style)
+
+// 	drawString(s, width/2+diff, height/2+2, "      ", style)
+// }
+// func bigNine(s tcell.Screen, width, height, diff int, style tcell.Style) {
+// 	drawString(s, width/2+diff, height/2-2, "      ", style)
+
+// 	drawString(s, width/2+diff, height/2-1, "  ", style)
+// 	drawString(s, width/2+diff+4, height/2-1, "  ", style)
+
+// 	drawString(s, width/2+diff, height/2, "      ", style)
+
+//		drawString(s, width/2+diff+4, height/2+1, "  ", style)
+//		drawString(s, width/2+diff, height/2+2, "      ", style)
+//	}
+//
+//	func bigZero(s tcell.Screen, width, height, diff int, style tcell.Style) {
+//		drawString(s, width/2+diff, height/2-2, "      ", style)
+//		drawString(s, width/2+diff, height/2-1, "  ", style)
+//		drawString(s, width/2+diff+4, height/2-1, "  ", style)
+//		drawString(s, width/2+diff, height/2, "  ", style)
+//		drawString(s, width/2+diff+4, height/2, "  ", style)
+//		drawString(s, width/2+diff, height/2+1, "  ", style)
+//		drawString(s, width/2+diff+4, height/2+1, "  ", style)
+//		drawString(s, width/2+diff, height/2+2, "      ", style)
+//	}
+//
+//	func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, style tcell.Style) {
+//		switch nowTime {
+//		case '0':
+//			bigZero(s, termWidth, termHeight, diff, style)
+//		case '1':
+//			bigOne(s, termWidth, termHeight, diff, style)
+//		case '2':
+//			bigTwo(s, termWidth, termHeight, diff, style)
+//		case '3':
+//			bigThree(s, termWidth, termHeight, diff, style)
+//		case '4':
+//			bigFour(s, termWidth, termHeight, diff, style)
+//		case '5':
+//			bigFive(s, termWidth, termHeight, diff, style)
+//		case '6':
+//			bigSix(s, termWidth, termHeight, diff, style)
+//		case '7':
+//			bigSeven(s, termWidth, termHeight, diff, style)
+//		case '8':
+//			bigEight(s, termWidth, termHeight, diff, style)
+//		case '9':
+//			bigNine(s, termWidth, termHeight, diff, style)
+//		case ':':
+//			bigColon(s, termWidth, termHeight, diff, style)
+//		}
+//	}
+type drawContext struct {
+	s      tcell.Screen
+	width  int
+	height int
+	diff   int
+	style  tcell.Style
 }
-func bigOne(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff+2, height/2-2, "  ", style)
-	drawString(s, width/2+diff, height/2-1, "    ", style)
-	drawString(s, width/2+diff+2, height/2, "  ", style)
-	drawString(s, width/2+diff+2, height/2+1, "  ", style)
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+type charPart struct {
+	dx, dy int
+	text   string
 }
-func bigTwo(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-	drawString(s, width/2+diff, height/2, "      ", style)
-	drawString(s, width/2+diff, height/2+1, "  ", style)
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+
+func drawBigChar(ctx drawContext, parts []charPart) {
+	for _, p := range parts {
+		x := ctx.width/2 + ctx.diff + p.dx
+		y := ctx.height/2 + p.dy
+		drawString(ctx.s, x, y, p.text, ctx.style)
+	}
 }
-func bigThree(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-	drawString(s, width/2+diff, height/2, "      ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+
+func bigColon(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{2, -1, "  "},
+		{2, 1, "  "},
+	})
 }
-func bigFour(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "  ", style)
-	drawString(s, width/2+diff+4, height/2-2, "  ", style)
-
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-
-	drawString(s, width/2+diff, height/2, "      ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+func bigOne(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{2, -2, "  "},
+		{0, -1, "    "},
+		{2, 0, "  "},
+		{2, 1, "  "},
+		{0, 2, "      "},
+	})
 }
-func bigFive(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff, height/2, "      ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+func bigTwo(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{4, -1, "  "},
+		{0, 0, "      "},
+		{0, 1, "  "},
+		{0, 2, "      "},
+	})
 }
-func bigSix(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff, height/2, "      ", style)
-
-	drawString(s, width/2+diff, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+func bigThree(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{4, -1, "  "},
+		{0, 0, "      "},
+		{4, 1, "  "},
+		{0, 2, "      "},
+	})
 }
-func bigSeven(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2, "  ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+2, "  ", style)
+func bigFour(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "  "},
+		{4, -2, "  "},
+		{0, -1, "  "},
+		{4, -1, "  "},
+		{0, 0, "      "},
+		{4, 1, "  "},
+		{4, 2, "  "},
+	})
 }
-func bigEight(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-
-	drawString(s, width/2+diff, height/2, "      ", style)
-
-	drawString(s, width/2+diff, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+func bigFive(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{0, -1, "  "},
+		{0, 0, "      "},
+		{4, 1, "  "},
+		{0, 2, "      "},
+	})
 }
-func bigNine(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-
-	drawString(s, width/2+diff, height/2, "      ", style)
-
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+func bigSix(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{0, -1, "  "},
+		{0, 0, "      "},
+		{0, 1, "  "},
+		{4, 1, "  "},
+		{0, 2, "      "},
+	})
 }
-func bigZero(s tcell.Screen, width, height, diff int, style tcell.Style) {
-	drawString(s, width/2+diff, height/2-2, "      ", style)
-	drawString(s, width/2+diff, height/2-1, "  ", style)
-	drawString(s, width/2+diff+4, height/2-1, "  ", style)
-	drawString(s, width/2+diff, height/2, "  ", style)
-	drawString(s, width/2+diff+4, height/2, "  ", style)
-	drawString(s, width/2+diff, height/2+1, "  ", style)
-	drawString(s, width/2+diff+4, height/2+1, "  ", style)
-	drawString(s, width/2+diff, height/2+2, "      ", style)
+func bigSeven(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{4, -1, "  "},
+		{4, 0, "  "},
+		{4, 1, "  "},
+		{4, 2, "  "},
+	})
+}
+func bigEight(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{0, -1, "  "},
+		{4, -1, "  "},
+		{0, 0, "      "},
+		{0, 1, "  "},
+		{4, 1, "  "},
+		{0, 2, "      "},
+	})
+}
+func bigNine(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{0, -1, "  "},
+		{4, -1, "  "},
+		{0, 0, "      "},
+		{4, 1, "  "},
+		{0, 2, "      "},
+	})
+}
+func bigZero(ctx drawContext) {
+	drawBigChar(ctx, []charPart{
+		{0, -2, "      "},
+		{0, -1, "  "},
+		{4, -1, "  "},
+		{0, 0, "  "},
+		{4, 0, "  "},
+		{0, 1, "  "},
+		{4, 1, "  "},
+		{0, 2, "      "},
+	})
 }
 func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+1, height/2-2, "    ", style)
@@ -388,29 +539,33 @@ func bigM(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2+2, "  ", style)
 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
+
+type drawFunc func(ctx drawContext)
+
+var bigDigitMap = map[byte]drawFunc{
+	'0': bigZero,
+	'1': bigOne,
+	'2': bigTwo,
+	'3': bigThree,
+	'4': bigFour,
+	'5': bigFive,
+	'6': bigSix,
+	'7': bigSeven,
+	'8': bigEight,
+	'9': bigNine,
+	':': bigColon,
+}
+
 func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, style tcell.Style) {
-	switch nowTime {
-	case '0':
-		bigZero(s, termWidth, termHeight, diff, style)
-	case '1':
-		bigOne(s, termWidth, termHeight, diff, style)
-	case '2':
-		bigTwo(s, termWidth, termHeight, diff, style)
-	case '3':
-		bigThree(s, termWidth, termHeight, diff, style)
-	case '4':
-		bigFour(s, termWidth, termHeight, diff, style)
-	case '5':
-		bigFive(s, termWidth, termHeight, diff, style)
-	case '6':
-		bigSix(s, termWidth, termHeight, diff, style)
-	case '7':
-		bigSeven(s, termWidth, termHeight, diff, style)
-	case '8':
-		bigEight(s, termWidth, termHeight, diff, style)
-	case '9':
-		bigNine(s, termWidth, termHeight, diff, style)
-	case ':':
-		bigColon(s, termWidth, termHeight, diff, style)
+	ctx := drawContext{
+		s:      s,
+		width:  termWidth,
+		height: termHeight,
+		diff:   diff,
+		style:  style,
+	}
+
+	if fn, ok := bigDigitMap[nowTime]; ok {
+		fn(ctx)
 	}
 }
