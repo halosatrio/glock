@@ -245,7 +245,6 @@ func drawMeridiem(s tcell.Screen, val string, width, height, diff int, style tce
 }
 
 // Big chunks of code just to draw block numbers on screen
-// need to be refactor and simplified
 // the block numbers are drawn in 6cols x 5rows grid
 //
 //	..00..
@@ -253,32 +252,8 @@ func drawMeridiem(s tcell.Screen, val string, width, height, diff int, style tce
 //	..00..
 //	..00..
 //	000000
-//	func drawNumber(s tcell.Screen, termWidth, termHeight, diff int, nowTime byte, style tcell.Style) {
-//		switch nowTime {
-//		case '0':
-//			bigZero(s, termWidth, termHeight, diff, style)
-//		case '1':
-//			bigOne(s, termWidth, termHeight, diff, style)
-//		case '2':
-//			bigTwo(s, termWidth, termHeight, diff, style)
-//		case '3':
-//			bigThree(s, termWidth, termHeight, diff, style)
-//		case '4':
-//			bigFour(s, termWidth, termHeight, diff, style)
-//		case '5':
-//			bigFive(s, termWidth, termHeight, diff, style)
-//		case '6':
-//			bigSix(s, termWidth, termHeight, diff, style)
-//		case '7':
-//			bigSeven(s, termWidth, termHeight, diff, style)
-//		case '8':
-//			bigEight(s, termWidth, termHeight, diff, style)
-//		case '9':
-//			bigNine(s, termWidth, termHeight, diff, style)
-//		case ':':
-//			bigColon(s, termWidth, termHeight, diff, style)
-//		}
-//	}
+
+// this is the old function before refactor
 func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+1, height/2-2, "    ", style)
 
@@ -321,6 +296,7 @@ func bigM(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
 
+// this chunk of code bellow has been refactored
 type drawContext struct {
 	s      tcell.Screen
 	width  int
