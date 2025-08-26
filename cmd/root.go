@@ -1,4 +1,6 @@
 /*
+Package cmd of Glock
+
 Copyright © 2025 SATRIO BAYU AJI <halosatrio@gmail.com>
 MIT License
 */
@@ -14,9 +16,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// give spacing on block
-// default block width is 6
-// block 2,5,8 have extra 1 spacing
+/*
+	 ClockDiff values are spacing values
+	  they give spacing on block
+		default block width is 6
+	  block 2,5,8 have extra 1 spacing
+*/
 var ClockDiff = [8]int{0, 7, 6, 6, 7, 6, 6, 7}
 
 // rootCmd represents the base command when called without any subcommands
@@ -170,9 +175,11 @@ func Execute() {
 	}
 }
 
-var Seconds bool
-var Meridiem bool
-var FlagColor string
+var (
+	Seconds   bool
+	Meridiem  bool
+	FlagColor string
+)
 
 func init() {
 	// boolean flags only need the flag without value
@@ -268,6 +275,7 @@ func bigA(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2+2, "  ", style)
 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
+
 func bigP(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2-2, "      ", style)
 
@@ -280,6 +288,7 @@ func bigP(s tcell.Screen, width, height, diff int, style tcell.Style) {
 
 	drawString(s, width/2+diff, height/2+2, "  ", style)
 }
+
 func bigM(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff, height/2-2, "  ", style)
 	drawString(s, width/2+diff+4, height/2-2, "  ", style)
@@ -296,7 +305,7 @@ func bigM(s tcell.Screen, width, height, diff int, style tcell.Style) {
 	drawString(s, width/2+diff+4, height/2+2, "  ", style)
 }
 
-// this chunk of code bellow has been refactored
+// this chunk of code below has been refactored
 type drawContext struct {
 	s      tcell.Screen
 	width  int
@@ -323,6 +332,7 @@ func bigColon(ctx drawContext) {
 		{2, 1, "  "},
 	})
 }
+
 func bigOne(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{2, -2, "  "},
@@ -332,6 +342,7 @@ func bigOne(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigTwo(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -341,6 +352,7 @@ func bigTwo(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigThree(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -350,6 +362,7 @@ func bigThree(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigFour(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "  "},
@@ -361,6 +374,7 @@ func bigFour(ctx drawContext) {
 		{4, 2, "  "},
 	})
 }
+
 func bigFive(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -370,6 +384,7 @@ func bigFive(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigSix(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -380,6 +395,7 @@ func bigSix(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigSeven(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -389,6 +405,7 @@ func bigSeven(ctx drawContext) {
 		{4, 2, "  "},
 	})
 }
+
 func bigEight(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -400,6 +417,7 @@ func bigEight(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigNine(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
@@ -410,6 +428,7 @@ func bigNine(ctx drawContext) {
 		{0, 2, "      "},
 	})
 }
+
 func bigZero(ctx drawContext) {
 	drawBigChar(ctx, []charPart{
 		{0, -2, "      "},
