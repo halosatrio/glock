@@ -1,5 +1,5 @@
 /*
-Copyright © 2025 SATRIO BAYU AJI <halosatrio@gmail.com>
+Copyright © 2026 SATRIO BAYU AJI <halosatrio@gmail.com>
 MIT License
 */
 package main
