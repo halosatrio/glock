@@ -1,6 +1,6 @@
 /*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2025 SATRIO BAYU AJI <halosatrio@gmail.com>
+MIT License
 */
 package main
 
