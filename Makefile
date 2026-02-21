@@ -6,3 +6,8 @@ build:
 
 run:
 	@bin/main
+
+test:
+	@echo "--- running tests ---"
+	go test ./... -v
+	@echo "--- tests complete ---"
