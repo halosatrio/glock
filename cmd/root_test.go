@@ -12,6 +12,20 @@ import (
 	"github.com/gdamore/tcell/v3/vt"
 )
 
+func newTestScreen(t *testing.T) tcell.Screen {
+	t.Helper()
+	mt := vt.NewMockTerm()
+	s, err := tcell.NewTerminfoScreenFromTty(mt, tcell.OptTerm("ansi"))
+	if err != nil {
+		t.Fatalf("failed to create screen: %v", err)
+	}
+	if err := s.Init(); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(s.Fini)
+	return s
+}
+
 func TestFlagColor(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -55,18 +69,7 @@ func TestBigDigitMap(t *testing.T) {
 }
 
 func TestDrawNumber(t *testing.T) {
-	mt := vt.NewMockTerm(vt.MockOptColors(8))
-	s, err := tcell.NewTerminfoScreenFromTty(mt, tcell.OptColors(8), tcell.OptTerm("ansi"))
-	if err != nil {
-		// t.Fatalf("failed to create screen: %v", err)
-		t.Fatalf("failed to create simulation screen: %v", err)
-	}
-	tcell.ShimScreen(s)
-
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	style := tcell.StyleDefault
 
@@ -99,18 +102,7 @@ func TestDrawNumber(t *testing.T) {
 }
 
 func TestDrawString(t *testing.T) {
-	mt := vt.NewMockTerm(vt.MockOptColors(8))
-	s, err := tcell.NewTerminfoScreenFromTty(mt, tcell.OptColors(8), tcell.OptTerm("ansi"))
-	if err != nil {
-		// t.Fatalf("failed to create screen: %v", err)
-		t.Fatalf("failed to create simulation screen: %v", err)
-	}
-	tcell.ShimScreen(s)
-
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	style := tcell.StyleDefault
 	testCases := []string{"test", "123", "", "a b c"}
@@ -123,7 +115,7 @@ func TestDrawString(t *testing.T) {
 			for i, r := range tc {
 				c, _, _ := s.Get(i, 0)
 				if c != string(r) {
-					t.Errorf("expected %q at position %d, got %q", r, i+1, c)
+					t.Errorf("expected %q at position %d, got %q", r, i, c)
 				}
 			}
 		})
@@ -131,18 +123,7 @@ func TestDrawString(t *testing.T) {
 }
 
 func TestDrawMeridiem(t *testing.T) {
-	mt := vt.NewMockTerm(vt.MockOptColors(8))
-	s, err := tcell.NewTerminfoScreenFromTty(mt, tcell.OptColors(8), tcell.OptTerm("ansi"))
-	if err != nil {
-		// t.Fatalf("failed to create screen: %v", err)
-		t.Fatalf("failed to create simulation screen: %v", err)
-	}
-	tcell.ShimScreen(s)
-
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	style := tcell.StyleDefault
 
@@ -175,18 +156,7 @@ func TestDrawMeridiem(t *testing.T) {
 }
 
 func TestBigDigitFunctions(t *testing.T) {
-	mt := vt.NewMockTerm(vt.MockOptColors(8))
-	s, err := tcell.NewTerminfoScreenFromTty(mt, tcell.OptColors(8), tcell.OptTerm("ansi"))
-	if err != nil {
-		// t.Fatalf("failed to create screen: %v", err)
-		t.Fatalf("failed to create simulation screen: %v", err)
-	}
-	tcell.ShimScreen(s)
-
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	ctx := drawContext{
 		s:      s,
