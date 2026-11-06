@@ -12,7 +12,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/gdamore/tcell/v2"
+	"github.com/gdamore/tcell/v3"
+	"github.com/gdamore/tcell/v3/color"
 	"github.com/spf13/cobra"
 )
 
@@ -37,10 +38,10 @@ Usage: glock [FLAGS]
 Flags:
   -s, --second
         Display seconds
-  
+
   -m, --meridiem
         Display time in 12 hour format
-  
+
   -c, --color <COLOR>
 
   -h, --help
@@ -57,7 +58,6 @@ Flags:
 			log.Fatalf("%+v", err)
 		}
 		s.EnableMouse()
-		s.EnablePaste()
 		s.Clear()
 
 		quit := func() {
@@ -95,8 +95,9 @@ Flags:
 				termWidth, termHeight := s.Size()
 
 				// set color by flag
-				var color tcell.Style
-				color = color.Background(flagColor(FlagColor)).Foreground(flagColor(FlagColor))
+				defStyle := tcell.StyleDefault.
+					Foreground(color.Reset).
+					Background(flagColor(FlagColor))
 
 				// get current time
 				nowTime := time.Now()
@@ -112,10 +113,10 @@ Flags:
 					ampm := formattedTime[len(formattedTime)-2:]
 					if Seconds {
 						totalString, timeDiff = 8, -34
-						drawMeridiem(s, ampm, termWidth, termHeight, 24, color)
+						drawMeridiem(s, ampm, termWidth, termHeight, 24, defStyle)
 					} else {
 						totalString, timeDiff = 5, -26
-						drawMeridiem(s, ampm, termWidth, termHeight, 14, color)
+						drawMeridiem(s, ampm, termWidth, termHeight, 14, defStyle)
 					}
 				} else {
 					if Seconds {
@@ -128,16 +129,16 @@ Flags:
 				}
 
 				// draw date in the center of terminal below the clock
-				drawString(s, termWidth/2-5, termHeight/2+5, formattedDate, color.Background(tcell.ColorReset))
+				drawString(s, termWidth/2-5, termHeight/2+5, formattedDate, defStyle.Background(color.Reset).Foreground(flagColor(FlagColor)))
 
 				for i := 0; i < totalString; i++ {
 					if i != 0 {
 						timeDiff = timeDiff + ClockDiff[i]
 					}
 					if i == 2 || i == 5 {
-						drawNumber(s, termWidth, termHeight, timeDiff, formattedTime[i], color)
+						drawNumber(s, termWidth, termHeight, timeDiff, formattedTime[i], defStyle)
 					} else {
-						drawNumber(s, termWidth, termHeight, timeDiff, formattedTime[i], color)
+						drawNumber(s, termWidth, termHeight, timeDiff, formattedTime[i], defStyle)
 					}
 				}
 
@@ -150,15 +151,15 @@ Flags:
 
 	mainloop:
 		for {
-			// Poll event
-			ev := s.PollEvent()
+			// Poll event (can be used in select statement as well)
+			ev := <-s.EventQ()
 
 			// Process event
 			switch ev := ev.(type) {
 			case *tcell.EventResize:
 				s.Sync()
 			case *tcell.EventKey:
-				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC || ev.Rune() == 'q' {
+				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC || ev.Str() == "Q" || ev.Str() == "q" {
 					break mainloop
 				}
 			}
@@ -195,29 +196,29 @@ func init() {
 }
 
 // function to change color of the clock
-func flagColor(ColorString string) tcell.Color {
+func flagColor(ColorString string) color.Color {
 	switch ColorString {
 	case "black":
-		return tcell.ColorBlack
+		return color.Black
 	case "white":
-		return tcell.ColorWhite
+		return color.White
 	case "blue":
-		return tcell.ColorBlue
+		return color.Blue
 	case "cyan":
-		return tcell.ColorDarkCyan
+		return color.DarkCyan
 	case "green":
-		return tcell.ColorGreen
+		return color.Green
 	case "magenta":
-		return tcell.ColorDarkMagenta
+		return color.DarkMagenta
 	case "red":
-		return tcell.ColorRed
+		return color.Red
 	case "yellow":
-		return tcell.ColorYellow
+		return color.Yellow
 	case "gray":
-		return tcell.ColorDarkGray
+		return color.DarkGray
 	default:
 		if ColorString == "" {
-			return tcell.ColorGreen
+			return color.Green
 		} else {
 			// can use int8 value 0 < 255 (total color number supported)
 			// num, _ := strconv.Atoi(ColorString)
@@ -227,7 +228,7 @@ func flagColor(ColorString string) tcell.Color {
 			} else {
 				// dont know how to exit the program and show error
 				// for the time being, invalid color will return default color = green
-				return tcell.ColorGreen
+				return color.Green
 			}
 		}
 	}
@@ -235,7 +236,7 @@ func flagColor(ColorString string) tcell.Color {
 
 func drawString(s tcell.Screen, x, y int, text string, style tcell.Style) {
 	for _, r := range text {
-		s.SetContent(x, y, r, nil, style)
+		s.Put(x, y, string(r), style)
 		x++
 	}
 }

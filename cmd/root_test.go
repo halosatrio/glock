@@ -7,27 +7,43 @@ package cmd
 import (
 	"testing"
 
-	"github.com/gdamore/tcell/v2"
+	"github.com/gdamore/tcell/v3"
+	"github.com/gdamore/tcell/v3/color"
+	"github.com/gdamore/tcell/v3/vt"
 )
+
+func newTestScreen(t *testing.T) tcell.Screen {
+	t.Helper()
+	mt := vt.NewMockTerm()
+	s, err := tcell.NewTerminfoScreenFromTty(mt, tcell.OptTerm("ansi"))
+	if err != nil {
+		t.Fatalf("failed to create screen: %v", err)
+	}
+	if err := s.Init(); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(s.Fini)
+	return s
+}
 
 func TestFlagColor(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    string
-		expected tcell.Color
+		expected color.Color
 	}{
-		{"Black color", "black", tcell.ColorBlack},
-		{"White color", "white", tcell.ColorWhite},
-		{"Blue color", "blue", tcell.ColorBlue},
-		{"Cyan color", "cyan", tcell.ColorDarkCyan},
-		{"Green color", "green", tcell.ColorGreen},
-		{"Magenta color", "magenta", tcell.ColorDarkMagenta},
-		{"Red color", "red", tcell.ColorRed},
-		{"Yellow color", "yellow", tcell.ColorYellow},
-		{"Gray color", "gray", tcell.ColorDarkGray},
-		{"Empty string", "", tcell.ColorGreen},
-		{"Invalid color", "invalid", tcell.ColorGreen},
-		{"Random color", "purple", tcell.ColorNames["purple"]},
+		{"Black color", "black", color.Black},
+		{"White color", "white", color.White},
+		{"Blue color", "blue", color.Blue},
+		{"Cyan color", "cyan", color.DarkCyan},
+		{"Green color", "green", color.Green},
+		{"Magenta color", "magenta", color.DarkMagenta},
+		{"Red color", "red", color.Red},
+		{"Yellow color", "yellow", color.Yellow},
+		{"Gray color", "gray", color.DarkGray},
+		{"Empty string", "", color.Green},
+		{"Invalid color", "invalid", color.Green},
+		{"Random color", "purple", color.Names["purple"]},
 	}
 
 	for _, tt := range tests {
@@ -53,14 +69,7 @@ func TestBigDigitMap(t *testing.T) {
 }
 
 func TestDrawNumber(t *testing.T) {
-	s := tcell.NewSimulationScreen("")
-	if s == nil {
-		t.Fatal("failed to create simulation screen")
-	}
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	style := tcell.StyleDefault
 
@@ -75,8 +84,8 @@ func TestDrawNumber(t *testing.T) {
 			hasContent := false
 			for y := 0; y < h; y++ {
 				for x := 0; x < w; x++ {
-					c, _, _, _ := s.GetContent(x, y)
-					if c != 0 {
+					c, _, _ := s.Get(x, y)
+					if c != "" {
 						hasContent = true
 						break
 					}
@@ -93,14 +102,7 @@ func TestDrawNumber(t *testing.T) {
 }
 
 func TestDrawString(t *testing.T) {
-	s := tcell.NewSimulationScreen("")
-	if s == nil {
-		t.Fatal("failed to create simulation screen")
-	}
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	style := tcell.StyleDefault
 	testCases := []string{"test", "123", "", "a b c"}
@@ -111,8 +113,8 @@ func TestDrawString(t *testing.T) {
 			drawString(s, 0, 0, tc, style)
 
 			for i, r := range tc {
-				c, _, _, _ := s.GetContent(i, 0)
-				if c != r {
+				c, _, _ := s.Get(i, 0)
+				if c != string(r) {
 					t.Errorf("expected %q at position %d, got %q", r, i, c)
 				}
 			}
@@ -121,14 +123,7 @@ func TestDrawString(t *testing.T) {
 }
 
 func TestDrawMeridiem(t *testing.T) {
-	s := tcell.NewSimulationScreen("")
-	if s == nil {
-		t.Fatal("failed to create simulation screen")
-	}
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	style := tcell.StyleDefault
 
@@ -143,8 +138,8 @@ func TestDrawMeridiem(t *testing.T) {
 			hasContent := false
 			for y := 0; y < h; y++ {
 				for x := 0; x < w; x++ {
-					c, _, _, _ := s.GetContent(x, y)
-					if c != 0 {
+					c, _, _ := s.Get(x, y)
+					if c != "" {
 						hasContent = true
 						break
 					}
@@ -161,14 +156,7 @@ func TestDrawMeridiem(t *testing.T) {
 }
 
 func TestBigDigitFunctions(t *testing.T) {
-	s := tcell.NewSimulationScreen("")
-	if s == nil {
-		t.Fatal("failed to create simulation screen")
-	}
-	if err := s.Init(); err != nil {
-		t.Fatal(err)
-	}
-	defer s.Fini()
+	s := newTestScreen(t)
 
 	ctx := drawContext{
 		s:      s,
@@ -207,8 +195,8 @@ func TestBigDigitFunctions(t *testing.T) {
 			hasContent := false
 			for y := 0; y < h; y++ {
 				for x := 0; x < w; x++ {
-					c, _, _, _ := s.GetContent(x, y)
-					if c != 0 {
+					c, _, _ := s.Get(x, y)
+					if c != "" {
 						hasContent = true
 						break
 					}
