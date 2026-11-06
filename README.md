@@ -7,7 +7,9 @@ a digital clock in your terminal, inspired by tty-clock
 ## libs used:
 
 - [cobra](https://github.com/spf13/cobra)
-- [tcell](https://github.com/gdamore/tcell)
+- [tcell v3](https://github.com/gdamore/tcell)
+
+- go version 1.26.0
 
 ## sample image:
 
