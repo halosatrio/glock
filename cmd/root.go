@@ -159,9 +159,7 @@ Flags:
 			case *tcell.EventResize:
 				s.Sync()
 			case *tcell.EventKey:
-				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
-					break mainloop
-				} else if ev.Str() == "Q" || ev.Str() == "q" {
+				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC || ev.Str() == "Q" || ev.Str() == "q" {
 					break mainloop
 				}
 			}
