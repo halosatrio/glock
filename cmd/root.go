@@ -52,17 +52,12 @@ Flags:
 		// Initialize screen
 		s, err := tcell.NewScreen()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
 			log.Fatalf("%+v", err)
-			os.Exit(1)
 		}
 		if err := s.Init(); err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
 			log.Fatalf("%+v", err)
-			os.Exit(1)
 		}
 		s.EnableMouse()
-		s.EnablePaste()
 		s.Clear()
 
 		quit := func() {
